@@ -1,0 +1,30 @@
+{{if .posts}}
+<table>
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>Poster</th>
+      <th width="13%">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{range .posts}}
+    <tr>
+      <td>{{.PostId}}</td>
+      <td>{{.User.Username}}</td>
+      <td>
+        <a href="/blog/{{.PostId}}">View</a>
+      </td>
+    </tr>
+    {{end}}
+  </tbody>
+</table>
+<p>
+  <a id="nextPage" href="{{.nextPage}}">More results</a>
+</p>
+
+{{else}}
+<p>
+  No more results
+</p>
+{{end}}

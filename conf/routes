@@ -4,6 +4,22 @@
 
 GET     /                                       Application.Index
 
+# Blog
+GET     /blog                                   Blog.Index
+GET     /blog/list                              Blog.List
+GET     /blog/post                              Blog.Post
+POST    /blog/post                              Blog.Post
+GET     /blog/{id}                              Blog.Show
+
+# Accounts
+GET     /register                               Application.Register
+POST    /register                               Application.SaveUser
+POST    /login                                  Application.Login
+GET     /logout                                 Application.Logout
+
+
+
+
 # Ignore favicon requests
 GET     /favicon.ico                            404
 

@@ -23,7 +23,7 @@ func (user *User) Validate(v *rev.Validation) {
 	v.Check(user.Username,
 		rev.Required{},
 		rev.MaxSize{15},
-		rev.MinSize{4},
+		rev.MinSize{2},
 		rev.Match{userRegex},
 	)
 

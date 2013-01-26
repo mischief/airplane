@@ -1,0 +1,14 @@
+{{template "header.html" .}}
+
+<h3>View Post</h3>
+
+{{with .post}}
+<div id="showpost">
+  <label>By {{.User.Name}}</label>
+  <p>
+    {{.Content}}
+  </p>
+</div>
+{{end}}
+
+{{template "footer.html" .}}

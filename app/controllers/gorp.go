@@ -8,7 +8,7 @@ import (
 	"github.com/robfig/revel"
 	"github.com/robfig/revel/modules/db/app"
 
-//  "github.com/mischief/airplane/app/models"
+  "github.com/mischief/airplane/app/models"
 )
 
 var (
@@ -23,7 +23,39 @@ func (p GorpPlugin) OnAppStart() {
 	db.DbPlugin{}.OnAppStart()
 	dbm = &gorp.DbMap{Db: db.Db, Dialect: gorp.SqliteDialect{}}
 
+  setColumnSizes := func(t *gorp.TableMap, colSizes map[string]int) {
+		for col, size := range colSizes {
+			t.ColMap(col).MaxSize = size
+		}
+	}
+
+  t := dbm.AddTable(models.User{}).SetKeys(true, "UserId")
+	t.ColMap("Password").Transient = true
+	setColumnSizes(t, map[string]int{
+		"Username": 20,
+		"Name":     100,
+	})
+
+  t = dbm.AddTable(models.Post{}).SetKeys(true, "PostId")
+  t.ColMap("User").Transient = true
+  setColumnSizes(t, map[string]int{
+    "Content": 1000,
+  })
+
   dbm.TraceOn("[gorp]", rev.INFO)
+  dbm.CreateTables()
+
+//  _, err := dbm.Get(models.User{}, 0)
+//  if(err != nil) {
+//    // user exists, skip insertion
+//  } else {
+//  	bcryptPassword, _ := bcrypt.GenerateFromPassword(
+//  		[]byte("demo"), bcrypt.DefaultCost)
+//	  demoUser := &models.User{0, "Demo User", "demo", "demo", bcryptPassword}
+//  	if err := dbm.Insert(demoUser); err != nil {
+//  		panic(err)
+//  	}
+//  }
 
 }
 

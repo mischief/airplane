@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="/public/css/bootstrap.css">
     <link rel="shortcut icon" type="image/png" href="/public/images/favicon.png">
     <script src="/public/js/jquery-1.5.2.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/public/js/sessvars.js" type="text/javascript" charset="utf-8"></script>
     {{range .moreStyles}}
       <link rel="stylesheet" type="text/css" href="/public/{{.}}">
     {{end}}
@@ -15,3 +16,29 @@
     {{end}}
   </head>
   <body>
+
+    <div id="header">
+      <h1>airplane blog</h1>
+      {{if .user}}
+        <div id="options">
+          Connected as {{.user.Username}}
+          |
+          <a href="{{url "Blog.Index"}}">Blog home</a>
+          |
+          <a href="{{url "Application.Logout"}}">Logout</a>
+        </div>
+      {{end}}
+    <div>
+
+      <div id="content">
+        {{if .flash.error}}
+          <p class="fError">
+            <strong>{{.flash.error}}</strong>
+          </p>
+        {{end}}
+        {{if .flash.success}}
+          <p class="fSuccess">
+            <strong>{{.flash.success}}</strong>
+          </p>
+        {{end}}
+

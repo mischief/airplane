@@ -1,0 +1,91 @@
+{{set . "title" "Home"}}
+{{template "header.html" .}}
+
+<h1>Blog</h1>
+
+<div id="postnew">
+  <form action="{{url "Blog.Post"}}" method="POST">
+    {{with $field := field "post.Content" .}}
+      <p class="{{$field.ErrorClass}}">
+        <label>Post:</label>
+        <textarea name="{{$field.Name}}" value="{{$field.Flash}}" rows="7" cols="30"></textarea> *
+        <span class="error">{{$field.Error}}</span>
+        </p>
+    {{end}}
+    <p class="buttons">
+    <input type="submit" value="Post" />
+    <a href="{{url "Blog.Index"}}">Cancel</a>
+    </p>
+  </form>
+</div>
+
+<div id="posts">
+  <p>
+    <input type="text" id="search" size="30" />
+    <input type="submit" id="submit" value="Search Posts" />
+
+    <br>
+
+    Results:
+    <select id="size">
+      <option value="5">5</option>
+      <option value="10">10</option>
+      <option value="20">20</option>
+    </select>
+  </p>
+
+  <div id="result">
+  </div>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+
+  // Rebuild state
+  $('#search').val(sessvars.search)
+  if(sessvars.page == undefined) {
+      sessvars.page = 1
+  }
+  if(sessvars.size == undefined) {
+      sessvars.size = 10
+  }
+  $('#size option[value='+sessvars.size+']').attr('selected', 'true')
+
+  // Search function
+  var search = function() {
+      sessvars.search = $('#search').val()
+      sessvars.size = $('#size').val()
+      $.get("/blog/list", {
+        "search": sessvars.search,
+        "size": sessvars.size,
+        "page": sessvars.page
+      }, function(data) {
+          $('#result').html(data)
+          $('#content').css('visibility', 'visible')
+      })
+  }
+
+  // Events handler
+  $('#submit').click(function() {
+      sessvars.page = 1
+      search()
+  })
+  $('#search').keyup(function() {
+      sessvars.page = 1
+      search()
+  })
+  $('#nextPage').live('click', function(e) {
+      sessvars.page = $(this).attr('href')
+      e.preventDefault()
+      search()
+  })
+
+  // Init
+  if(sessvars.search != undefined) {
+      $('#content').css('visibility', 'hidden')
+      search()
+  }
+
+</script>
+
+{{template "footer.html" .}}
+
